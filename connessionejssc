@@ -1,0 +1,27 @@
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import jssc.SerialPort;
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+ 
+/**
+ *
+ * @author Andrea Previtera
+ */
+public class RicezioneJSSC {
+   
+    public static void main(String[] args) throws SerialPortException, UnsupportedEncodingException, InterruptedException {
+        String[] port = SerialPortList.getPortNames();
+        String porta = Arrays.toString(port);
+         SerialPort serialPort = new SerialPort("/dev/tty.usbmodem1421");
+         System.out.println(porta);
+         serialPort.openPort();
+        Thread.sleep(1000);// questo comando serve perché quando si apre la connessione Arduino, per default, si riavvia.
+  
+        while(serialPort.getInputBufferBytesCount()>0 ){// loop finché la porta seriale riceve e non viene superato il limite del contatore
+            System.out.println(serialPort.readString());// stampa quello che legge
+      
+        }
+        serialPort.closePort();//Chiude la comunicazione.
+    }
+}
